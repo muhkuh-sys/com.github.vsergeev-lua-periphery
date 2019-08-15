@@ -1,0 +1,14 @@
+diff -uNr lua-periphery-1.1.3/src/lua_compat.h lua-periphery-1.1.3_patched/src/lua_compat.h
+--- lua-periphery-1.1.3/src/lua_compat.h	2018-04-29 03:14:48.000000000 +0200
++++ lua-periphery-1.1.3_patched/src/lua_compat.h	2019-08-14 15:46:04.564225484 +0200
+@@ -11,6 +11,10 @@
+ #define lua_tounsigned(L, idx) (lua_tointeger(L, idx))
+ #define lua_pushunsigned(L, val) (lua_pushinteger(L, (lua_Integer)val))
+ #define luaL_checkunsigned(L, narg) (luaL_checkinteger(L, narg))
++#elif LUA_VERSION_NUM == 504
++#define lua_tounsigned(L, idx) (lua_tointeger(L, idx))
++#define lua_pushunsigned(L, val) (lua_pushinteger(L, (lua_Integer)val))
++#define luaL_checkunsigned(L, narg) (luaL_checkinteger(L, narg))
+ #endif
+ 
+ #endif
