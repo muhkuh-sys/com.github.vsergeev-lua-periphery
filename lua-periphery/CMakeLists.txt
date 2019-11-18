@@ -4,7 +4,7 @@ PROJECT("lua-periphery")
 
 INCLUDE(ExternalProject)
 
-SET(VERSION_EXTERNAL "1.1.3")
+SET(VERSION_EXTERNAL "2.0.1")
 SET(VERSION_PACKAGE  "1")
 SET(PROJECT_VERSION  "${VERSION_EXTERNAL}.${VERSION_PACKAGE}")
 
@@ -13,7 +13,7 @@ INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/version.cmake)
 
 # Filter the jonchki configuration.
 CONFIGURE_FILE(installer/lua${BUILDCFG_LUA_VERSION}/lua-periphery.xml
-               ${CMAKE_CURRENT_BINARY_DIR}/lua${BUILDCFG_LUA_VERSION}-lua-periphery-${PROJECT_VERSION}.xml
+               ${CMAKE_BINARY_DIR}/lua${BUILDCFG_LUA_VERSION}-lua-periphery-${PROJECT_VERSION}.xml
                @ONLY)
 
 #----------------------------------------------------------------------------
@@ -41,8 +41,8 @@ IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
 	ExternalProject_Add(TARGET_luaperiphery
 	                    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}
 	                    URL ${CMAKE_CURRENT_SOURCE_DIR}/lua-periphery-${VERSION_EXTERNAL}.tar.gz
-	                    URL_HASH SHA1=12522a0108028de68c5f59b98d6de33a2a7b3b78
-	                    PATCH_COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/apply_patches.py --working-folder ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}/src/TARGET_luaperiphery --patch-folder ${CMAKE_CURRENT_SOURCE_DIR}/patches --strip 1 --copy-folder ${CMAKE_CURRENT_SOURCE_DIR}/copy
+	                    URL_HASH SHA1=cc5d0dd8b6d1463c9e3c003df0c22116c6198d88
+	                    PATCH_COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/apply_patches.py --working-folder ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}/src/TARGET_luaperiphery --copy-folder ${CMAKE_CURRENT_SOURCE_DIR}/copy
 	                    CMAKE_ARGS ${PRJ_CMAKE_ARGS}
 	                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/install
 	)
