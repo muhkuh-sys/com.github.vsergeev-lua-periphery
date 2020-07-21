@@ -5,7 +5,7 @@ PROJECT("lua-periphery")
 INCLUDE(ExternalProject)
 
 SET(VERSION_EXTERNAL "2.0.1")
-SET(VERSION_PACKAGE  "1")
+SET(VERSION_PACKAGE  "2")
 SET(PROJECT_VERSION  "${VERSION_EXTERNAL}.${VERSION_PACKAGE}")
 
 # Get the VCS version for the jonchki configuration.
