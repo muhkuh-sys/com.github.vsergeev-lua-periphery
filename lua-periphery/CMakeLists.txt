@@ -4,8 +4,8 @@ PROJECT("lua-periphery")
 
 INCLUDE(ExternalProject)
 
-SET(VERSION_EXTERNAL "2.0.1")
-SET(VERSION_PACKAGE  "2")
+SET(VERSION_EXTERNAL "2.2.2")
+SET(VERSION_PACKAGE  "1")
 SET(PROJECT_VERSION  "${VERSION_EXTERNAL}.${VERSION_PACKAGE}")
 
 # Get the VCS version for the jonchki configuration.
@@ -24,10 +24,8 @@ IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
 	# Select the LUA version.
 	INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/muhkuh_lua.cmake)
 
-	SET(cperiphery_DIR "${CMAKE_BINARY_DIR}/../external/c-periphery/install/cmake")
-	FIND_PACKAGE(cperiphery REQUIRED CONFIG)
-	GET_TARGET_PROPERTY(CPERIPHERY_LIBS cperiphery::TARGET_cperiphery LOCATION)
-	SET(CPERIPHERY_INCLUDE_DIR ${cperiphery_INCLUDE_DIR})
+	SET(CPERIPHERY_LIB "${CMAKE_BINARY_DIR}/../external/c-periphery/lib/libperiphery.a")
+	SET(CPERIPHERY_INCLUDE_DIR "${CMAKE_BINARY_DIR}/../external/c-periphery/include")
 
 	SET(PRJ_CMAKE_ARGS "")
 	LIST(APPEND PRJ_CMAKE_ARGS "-DVERSION_EXTERNAL=${VERSION_EXTERNAL}")
@@ -41,8 +39,8 @@ IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
 	ExternalProject_Add(TARGET_luaperiphery
 	                    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}
 	                    URL ${CMAKE_CURRENT_SOURCE_DIR}/lua-periphery-${VERSION_EXTERNAL}.tar.gz
-	                    URL_HASH SHA1=cc5d0dd8b6d1463c9e3c003df0c22116c6198d88
-	                    PATCH_COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/apply_patches.py --working-folder ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}/src/TARGET_luaperiphery --copy-folder ${CMAKE_CURRENT_SOURCE_DIR}/copy
+	                    URL_HASH SHA1=48c9728c7da95a9d28858edd9b549142d2984b77
+	                    PATCH_COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/apply_patches.py --working-folder ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}/src/TARGET_luaperiphery --patch-folder ${CMAKE_CURRENT_SOURCE_DIR}/patches --strip 1 --copy-folder ${CMAKE_CURRENT_SOURCE_DIR}/copy
 	                    CMAKE_ARGS ${PRJ_CMAKE_ARGS}
 	                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/install
 	)

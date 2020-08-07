@@ -1,0 +1,96 @@
+diff -uNr lua-periphery-2.2.2/src/lua_gpio.c lua-periphery-2.2.2_patched/src/lua_gpio.c
+--- lua-periphery-2.2.2/src/lua_gpio.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_gpio.c	2020-08-07 09:47:05.892012017 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/gpio.h>
++#include <periphery/gpio.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+diff -uNr lua-periphery-2.2.2/src/lua_i2c.c lua-periphery-2.2.2_patched/src/lua_i2c.c
+--- lua-periphery-2.2.2/src/lua_i2c.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_i2c.c	2020-08-07 09:46:31.046994114 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/i2c.h>
++#include <periphery/i2c.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+diff -uNr lua-periphery-2.2.2/src/lua_led.c lua-periphery-2.2.2_patched/src/lua_led.c
+--- lua-periphery-2.2.2/src/lua_led.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_led.c	2020-08-07 09:46:39.659245458 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/led.h>
++#include <periphery/led.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+diff -uNr lua-periphery-2.2.2/src/lua_mmio.c lua-periphery-2.2.2_patched/src/lua_mmio.c
+--- lua-periphery-2.2.2/src/lua_mmio.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_mmio.c	2020-08-07 09:46:59.899836791 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/mmio.h>
++#include <periphery/mmio.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+diff -uNr lua-periphery-2.2.2/src/lua_periphery.h lua-periphery-2.2.2_patched/src/lua_periphery.h
+--- lua-periphery-2.2.2/src/lua_periphery.h	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_periphery.h	2020-08-07 09:46:47.079462141 +0200
+@@ -7,7 +7,7 @@
+ #ifndef _LUA_PERIPHERY_H
+ #define _LUA_PERIPHERY_H
+ 
+-#include <c-periphery/src/version.h>
++#include <periphery/version.h>
+ 
+ #define _STRINGIFY(x)   #x
+ #define STRINGIFY(x)    _STRINGIFY(x)
+diff -uNr lua-periphery-2.2.2/src/lua_pwm.c lua-periphery-2.2.2_patched/src/lua_pwm.c
+--- lua-periphery-2.2.2/src/lua_pwm.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_pwm.c	2020-08-07 09:46:53.955663042 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/pwm.h>
++#include <periphery/pwm.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+diff -uNr lua-periphery-2.2.2/src/lua_serial.c lua-periphery-2.2.2_patched/src/lua_serial.c
+--- lua-periphery-2.2.2/src/lua_serial.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_serial.c	2020-08-07 09:47:11.416173622 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/serial.h>
++#include <periphery/serial.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+diff -uNr lua-periphery-2.2.2/src/lua_spi.c lua-periphery-2.2.2_patched/src/lua_spi.c
+--- lua-periphery-2.2.2/src/lua_spi.c	2020-07-28 07:31:10.000000000 +0200
++++ lua-periphery-2.2.2_patched/src/lua_spi.c	2020-08-07 09:47:16.496322291 +0200
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/spi.h>
++#include <periphery/spi.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
