@@ -5,7 +5,7 @@ PROJECT("c-periphery")
 INCLUDE(ExternalProject)
 
 
-SET(VERSION_EXTERNAL "2.3.1")
+SET(VERSION_EXTERNAL "2.4.2")
 
 
 #----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ LIST(APPEND PRJ_CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=''")
 ExternalProject_Add(TARGET_cperiphery
                     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/cperiphery-${VERSION_EXTERNAL}
                     URL ${CMAKE_CURRENT_SOURCE_DIR}/c-periphery-${VERSION_EXTERNAL}.tar.gz
-                    URL_HASH SHA1=4b1ceca4e76da7f6d10b76f8b2b65a5529af74fe
+                    URL_HASH SHA1=9a5509e43e5422980a056537024ac16a7c8f2026
                     CMAKE_ARGS ${PRJ_CMAKE_ARGS}
                     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${CMAKE_CURRENT_BINARY_DIR}
 )
