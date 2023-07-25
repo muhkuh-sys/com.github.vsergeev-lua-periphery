@@ -35,7 +35,7 @@ strCfg_jonchkiHerePath = os.path.join(
     'jonchki'
 )
 # This is the Jonchki version to use.
-strCfg_jonchkiVersion = '0.0.8.1'
+strCfg_jonchkiVersion = '0.0.11.1'
 # Look in this folder for Jonchki archives before downloading them.
 strCfg_jonchkiLocalArchives = os.path.join(
     strCfg_projectFolder,
@@ -81,23 +81,12 @@ if tPlatform['host_distribution_id'] == 'ubuntu':
         if tPlatform['distribution_version'] != tPlatform['host_distribution_version']:
             raise Exception('The target Ubuntu version must match the build host.')
 
-        if tPlatform['cpu_architecture'] == 'arm64':
-            # Build on linux for raspberry.
+        if tPlatform['cpu_architecture'] == tPlatform['host_cpu_architecture']:
+            # Build for the build host.
 
-            astrCMAKE_COMPILER = [
-                '-DCMAKE_TOOLCHAIN_FILE=%s/cmake/toolchainfiles/toolchain_ubuntu_arm64.cmake' % strCfg_projectFolder
-            ]
-            astrCMAKE_PLATFORM = [
-                '-DJONCHKI_PLATFORM_DIST_ID=%s' % tPlatform['distribution_id'],
-                '-DJONCHKI_PLATFORM_DIST_VERSION=%s' % tPlatform['distribution_version'],
-                '-DJONCHKI_PLATFORM_CPU_ARCH=%s' % tPlatform['cpu_architecture']
-            ]
-
-            astrJONCHKI_SYSTEM = [
-                '--distribution-id %s' % tPlatform['distribution_id'],
-                '--distribution-version %s' % tPlatform['distribution_version'],
-                '--cpu-architecture %s' % tPlatform['cpu_architecture']
-            ]
+            astrCMAKE_COMPILER = []
+            astrCMAKE_PLATFORM = []
+            astrJONCHKI_SYSTEM = []
             strMake = 'make'
 
         elif tPlatform['cpu_architecture'] == 'armhf':
@@ -119,8 +108,46 @@ if tPlatform['host_distribution_id'] == 'ubuntu':
             ]
             strMake = 'make'
 
+        elif tPlatform['cpu_architecture'] == 'arm64':
+            # Build on linux for raspberry.
+
+            astrCMAKE_COMPILER = [
+                '-DCMAKE_TOOLCHAIN_FILE=%s/cmake/toolchainfiles/toolchain_ubuntu_arm64.cmake' % strCfg_projectFolder
+            ]
+            astrCMAKE_PLATFORM = [
+                '-DJONCHKI_PLATFORM_DIST_ID=%s' % tPlatform['distribution_id'],
+                '-DJONCHKI_PLATFORM_DIST_VERSION=%s' % tPlatform['distribution_version'],
+                '-DJONCHKI_PLATFORM_CPU_ARCH=%s' % tPlatform['cpu_architecture']
+            ]
+
+            astrJONCHKI_SYSTEM = [
+                '--distribution-id %s' % tPlatform['distribution_id'],
+                '--distribution-version %s' % tPlatform['distribution_version'],
+                '--cpu-architecture %s' % tPlatform['cpu_architecture']
+            ]
+            strMake = 'make'
+
+        elif tPlatform['cpu_architecture'] == 'riscv64':
+            # Build on linux for riscv64.
+
+            astrCMAKE_COMPILER = [
+                '-DCMAKE_TOOLCHAIN_FILE=%s/cmake/toolchainfiles/toolchain_ubuntu_riscv64.cmake' % strCfg_projectFolder
+            ]
+            astrCMAKE_PLATFORM = [
+                '-DJONCHKI_PLATFORM_DIST_ID=%s' % tPlatform['distribution_id'],
+                '-DJONCHKI_PLATFORM_DIST_VERSION=%s' % tPlatform['distribution_version'],
+                '-DJONCHKI_PLATFORM_CPU_ARCH=%s' % tPlatform['cpu_architecture']
+            ]
+
+            astrJONCHKI_SYSTEM = [
+                '--distribution-id %s' % tPlatform['distribution_id'],
+                '--distribution-version %s' % tPlatform['distribution_version'],
+                '--cpu-architecture %s' % tPlatform['cpu_architecture']
+            ]
+            strMake = 'make'
+
         else:
-            raise Exception('Unsupported CPU architecture: "%s"' % tPlatform['cpu_architecture'])
+            raise Exception('Unknown CPU architecture: "%s"' % tPlatform['cpu_architecture'])
 
     else:
         raise Exception('Unknown distribution: "%s"' % tPlatform['distribution_id'])
@@ -135,8 +162,6 @@ else:
 astrFolders = [
     strCfg_workingFolder,
     os.path.join(strCfg_workingFolder, 'external'),
-    os.path.join(strCfg_workingFolder, 'lua5.1'),
-    os.path.join(strCfg_workingFolder, 'lua5.1', 'build_requirements'),
     os.path.join(strCfg_workingFolder, 'lua5.4'),
     os.path.join(strCfg_workingFolder, 'lua5.4', 'build_requirements'),
 ]
@@ -151,84 +176,9 @@ strJonchki = jonchkihere.install(
     LOCAL_ARCHIVES=strCfg_jonchkiLocalArchives
 )
 
-
 # ---------------------------------------------------------------------------
 #
-# Get the build requirements for LUA5.1 and the externals.
-#
-strCwd = os.path.join(strCfg_workingFolder, 'lua5.1', 'build_requirements')
-for strMatch in glob.iglob(os.path.join(strCwd, 'lua5.1-lua-periphery-*.xml')):
-    os.remove(strMatch)
-
-astrCmd = [
-    'cmake',
-    '-DCMAKE_INSTALL_PREFIX=""',
-    '-DPRJ_DIR=%s' % strCfg_projectFolder,
-    '-DBUILDCFG_ONLY_JONCHKI_CFG="ON"',
-    '-DBUILDCFG_LUA_USE_SYSTEM="OFF"',
-    '-DBUILDCFG_LUA_VERSION="5.1"'
-]
-astrCmd.extend(astrCMAKE_COMPILER)
-astrCmd.extend(astrCMAKE_PLATFORM)
-astrCmd.append(strCfg_projectFolder)
-subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
-subprocess.check_call(strMake, shell=True, cwd=strCwd, env=astrEnv)
-
-astrMatch = glob.glob(os.path.join(strCwd, 'lua5.1-lua-periphery-*.xml'))
-if len(astrMatch) != 1:
-    raise Exception('No match found for "lua5.1-lua-periphery-*.xml".')
-
-astrCmd = [
-    strJonchki,
-    'install-dependencies',
-    '--verbose', strCfg_jonchkiVerbose,
-    '--syscfg', strCfg_jonchkiSystemConfiguration,
-    '--prjcfg', strCfg_jonchkiProjectConfiguration
-]
-astrCmd.extend(astrJONCHKI_SYSTEM)
-astrCmd.append('--build-dependencies')
-astrCmd.append(astrMatch[0])
-subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
-
-# ---------------------------------------------------------------------------
-#
-# Build the externals.
-#
-astrCmd = [
-    'cmake',
-    '-DCMAKE_INSTALL_PREFIX=""',
-    '-DPRJ_DIR=%s' % strCfg_projectFolder
-]
-astrCmd.extend(astrCMAKE_COMPILER)
-astrCmd.append(os.path.join(strCfg_projectFolder, 'external'))
-strCwd = os.path.join(strCfg_workingFolder, 'external')
-subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
-subprocess.check_call(strMake, shell=True, cwd=strCwd, env=astrEnv)
-
-astrCMAKE_COMPILER.append('-DEXTERNAL_LIB_DIR=%s' % os.path.join(strCfg_workingFolder, 'external', 'install', 'lib'))
-astrCMAKE_COMPILER.append('-DEXTERNAL_INCLUDE_DIR=%s' % os.path.join(strCfg_workingFolder, 'external', 'install', 'include'))
-
-# ---------------------------------------------------------------------------
-#
-# Build the LUA5.1 version.
-#
-astrCmd = [
-    'cmake',
-    '-DCMAKE_INSTALL_PREFIX=""',
-    '-DPRJ_DIR=%s' % strCfg_projectFolder,
-    '-DBUILDCFG_LUA_USE_SYSTEM="OFF"',
-    '-DBUILDCFG_LUA_VERSION="5.1"'
-]
-astrCmd.extend(astrCMAKE_COMPILER)
-astrCmd.extend(astrCMAKE_PLATFORM)
-astrCmd.append(strCfg_projectFolder)
-strCwd = os.path.join(strCfg_workingFolder, 'lua5.1')
-subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
-subprocess.check_call('%s pack' % strMake, shell=True, cwd=strCwd, env=astrEnv)
-
-# ---------------------------------------------------------------------------
-#
-# Get the build requirements for LUA5.4.
+# Get the build requirements for LUA5.4 and the externals.
 #
 strCwd = os.path.join(strCfg_workingFolder, 'lua5.4', 'build_requirements')
 for strMatch in glob.iglob(os.path.join(strCwd, 'lua5.4-lua-periphery-*.xml')):
@@ -257,13 +207,42 @@ astrCmd = [
     'install-dependencies',
     '--verbose', strCfg_jonchkiVerbose,
     '--syscfg', strCfg_jonchkiSystemConfiguration,
-    '--prjcfg', strCfg_jonchkiProjectConfiguration
+    '--prjcfg', strCfg_jonchkiProjectConfiguration,
+
+    '--logfile', os.path.join(
+        strCfg_workingFolder,
+        'lua5.4',
+        'build_requirements',
+        'jonchki.log'
+    ),
+
+    '--dependency-log', os.path.join(
+        strCfg_projectFolder,
+        'dependency-log.xml'
+    )
 ]
 astrCmd.extend(astrJONCHKI_SYSTEM)
 astrCmd.append('--build-dependencies')
 astrCmd.append(astrMatch[0])
 subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
 
+# ---------------------------------------------------------------------------
+#
+# Build the externals.
+#
+astrCmd = [
+    'cmake',
+    '-DCMAKE_INSTALL_PREFIX=""',
+    '-DPRJ_DIR=%s' % strCfg_projectFolder
+]
+astrCmd.extend(astrCMAKE_COMPILER)
+astrCmd.append(os.path.join(strCfg_projectFolder, 'external'))
+strCwd = os.path.join(strCfg_workingFolder, 'external')
+subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
+subprocess.check_call(strMake, shell=True, cwd=strCwd, env=astrEnv)
+
+astrCMAKE_COMPILER.append('-DEXTERNAL_LIB_DIR=%s' % os.path.join(strCfg_workingFolder, 'external', 'install', 'lib'))
+astrCMAKE_COMPILER.append('-DEXTERNAL_INCLUDE_DIR=%s' % os.path.join(strCfg_workingFolder, 'external', 'install', 'include'))
 
 # ---------------------------------------------------------------------------
 #
