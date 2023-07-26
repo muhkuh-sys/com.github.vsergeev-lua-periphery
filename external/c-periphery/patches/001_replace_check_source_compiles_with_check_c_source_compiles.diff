@@ -1,0 +1,14 @@
+diff -uNr c-periphery-2.4.2/CMakeLists.txt c-periphery-2.4.2_patched/CMakeLists.txt
+--- c-periphery-2.4.2/CMakeLists.txt	2023-07-06 05:20:20.000000000 +0200
++++ c-periphery-2.4.2_patched/CMakeLists.txt	2023-07-26 09:21:55.746374397 +0200
+@@ -8,8 +8,8 @@
+ endif()
+ 
+ # Check Linux kernel header files for character device GPIO support
+-include(CheckSourceCompiles)
+-check_source_compiles(C "#include <linux/gpio.h>\nint main(void) { GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME; return 0; }" HAVE_GPIO_CDEV_V2)
++include(CheckCSourceCompiles)
++check_c_source_compiles("#include <linux/gpio.h>\nint main(void) { GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME; return 0; }" HAVE_GPIO_CDEV_V2)
+ include(CheckSymbolExists)
+ check_symbol_exists(GPIO_GET_LINEEVENT_IOCTL linux/gpio.h HAVE_GPIO_CDEV_V1)
+ if(HAVE_GPIO_CDEV_V2)

@@ -40,7 +40,8 @@ IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
 	                    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}
 	                    URL ${CMAKE_CURRENT_SOURCE_DIR}/lua-periphery-${VERSION_EXTERNAL}.tar.gz
 	                    URL_HASH SHA1=76a3a480d2e4e2bc1d73d8cfdd18958dae86648b
-	                    PATCH_COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/apply_patches.py --working-folder ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}/src/TARGET_luaperiphery --patch-folder ${CMAKE_CURRENT_SOURCE_DIR}/patches --strip 1 --copy-folder ${CMAKE_CURRENT_SOURCE_DIR}/copy
+	                    DEPENDS TARGET_cperiphery
+	                    PATCH_COMMAND "${PYTHON_INTERPRETER}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/apply_patches.py --working-folder ${CMAKE_CURRENT_BINARY_DIR}/luaperiphery-${VERSION_EXTERNAL}/src/TARGET_luaperiphery --patch-folder ${CMAKE_CURRENT_SOURCE_DIR}/patches --strip 1 --copy-folder ${CMAKE_CURRENT_SOURCE_DIR}/copy
 	                    CMAKE_ARGS ${PRJ_CMAKE_ARGS}
 	                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/install
 	)
@@ -86,8 +87,8 @@ IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
 	ADD_CUSTOM_TARGET(pack
 	                  COMMAND ${CMAKE_MAKE_PROGRAM}
 	                  COMMAND ${CMAKE_MAKE_PROGRAM} package
-	                  COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/generate_hash.py ${CPACK_OUTPUT_FILE_PREFIX}/lua${BUILDCFG_LUA_VERSION}-lua-periphery-${PROJECT_VERSION}-${JONCHKI_PLATFORM}.xml
-	                  COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/generate_hash.py ${CPACK_OUTPUT_FILE_PREFIX}/lua${BUILDCFG_LUA_VERSION}-lua-periphery-${PROJECT_VERSION}-${JONCHKI_PLATFORM}.tar.xz
+	                  COMMAND "${PYTHON_INTERPRETER}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/generate_hash.py ${CPACK_OUTPUT_FILE_PREFIX}/lua${BUILDCFG_LUA_VERSION}-lua-periphery-${PROJECT_VERSION}-${JONCHKI_PLATFORM}.xml
+	                  COMMAND "${PYTHON_INTERPRETER}" ${CMAKE_HOME_DIRECTORY}/cmake/tools/generate_hash.py ${CPACK_OUTPUT_FILE_PREFIX}/lua${BUILDCFG_LUA_VERSION}-lua-periphery-${PROJECT_VERSION}-${JONCHKI_PLATFORM}.tar.xz
 	                  COMMENT "Pack the artifact and generate the hashes...")
 
 
