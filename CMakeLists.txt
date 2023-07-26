@@ -22,14 +22,23 @@ OPTION(BUILDCFG_ONLY_JONCHKI_CFG "Build only the jonchki configuration. This is 
 # Find all packages.
 #
 
-# Python is used for some test scripts.
-FIND_PACKAGE(PythonInterp 2.7 REQUIRED)
+IF(CMAKE_VERSION VERSION_LESS 3.12.0)
+	FIND_PACKAGE(PythonInterp 3 REQUIRED)
+	SET(PYTHON_INTERPRETER "${PYTHON_EXECUTABLE}")
+ELSE(CMAKE_VERSION VERSION_LESS 3.12.0)
+	FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
+	SET(PYTHON_INTERPRETER "${Python3_EXECUTABLE}")
+ENDIF(CMAKE_VERSION VERSION_LESS 3.12.0)
 
 
 #----------------------------------------------------------------------------
 #
 # Include the projects in the subdirectories.
 #
+IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
+	ADD_SUBDIRECTORY(external)
+ENDIF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
+
 ADD_SUBDIRECTORY(lua-periphery)
 
 

@@ -228,24 +228,6 @@ subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
 
 # ---------------------------------------------------------------------------
 #
-# Build the externals.
-#
-astrCmd = [
-    'cmake',
-    '-DCMAKE_INSTALL_PREFIX=""',
-    '-DPRJ_DIR=%s' % strCfg_projectFolder
-]
-astrCmd.extend(astrCMAKE_COMPILER)
-astrCmd.append(os.path.join(strCfg_projectFolder, 'external'))
-strCwd = os.path.join(strCfg_workingFolder, 'external')
-subprocess.check_call(' '.join(astrCmd), shell=True, cwd=strCwd, env=astrEnv)
-subprocess.check_call(strMake, shell=True, cwd=strCwd, env=astrEnv)
-
-astrCMAKE_COMPILER.append('-DEXTERNAL_LIB_DIR=%s' % os.path.join(strCfg_workingFolder, 'external', 'install', 'lib'))
-astrCMAKE_COMPILER.append('-DEXTERNAL_INCLUDE_DIR=%s' % os.path.join(strCfg_workingFolder, 'external', 'install', 'include'))
-
-# ---------------------------------------------------------------------------
-#
 # Build the LUA5.4 version.
 #
 astrCmd = [

@@ -24,8 +24,8 @@ IF((${BUILDCFG_ONLY_JONCHKI_CFG} STREQUAL "OFF"))
 	# Select the LUA version.
 	INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/muhkuh_lua.cmake)
 
-	SET(CPERIPHERY_LIB "${CMAKE_BINARY_DIR}/../external/c-periphery/lib/libperiphery.a")
-	SET(CPERIPHERY_INCLUDE_DIR "${CMAKE_BINARY_DIR}/../external/c-periphery/include")
+	SET(CPERIPHERY_LIB "${CMAKE_BINARY_DIR}/external/c-periphery/lib/libperiphery.a")
+	SET(CPERIPHERY_INCLUDE_DIR "${CMAKE_BINARY_DIR}/external/c-periphery/include")
 
 	SET(PRJ_CMAKE_ARGS "")
 	LIST(APPEND PRJ_CMAKE_ARGS "-DVERSION_EXTERNAL=${VERSION_EXTERNAL}")
