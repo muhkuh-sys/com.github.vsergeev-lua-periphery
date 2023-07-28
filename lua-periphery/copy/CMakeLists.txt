@@ -23,7 +23,7 @@ ADD_LIBRARY(TARGET_luaperiphery MODULE
             ${SOURCES})
 TARGET_INCLUDE_DIRECTORIES(TARGET_luaperiphery
                            PRIVATE ${LUA_INCLUDE_DIR} ${CPERIPHERY_INCLUDE_DIR})
-TARGET_LINK_LIBRARIES(TARGET_luaperiphery ${LUA_LIBRARIES} ${CPERIPHERY_LIB})
+TARGET_LINK_LIBRARIES(TARGET_luaperiphery ${CPERIPHERY_LIB})
 TARGET_COMPILE_OPTIONS(TARGET_luaperiphery
                        PRIVATE -std=c99 -pedantic -D_XOPEN_SOURCE=700 -Wall -Wextra -Wno-unused-parameter -fPIC)
 
